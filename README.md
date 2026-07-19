@@ -92,11 +92,9 @@ sudo systemctl enable postgresql
 ```sql
    sudo -u postgres psql
    
-   -- Ejecutar dentro del prompt de psql:
-   CREATE DATABASE favorita_db;
-   CREATE USER favorita_user WITH PASSWORD 'epn2026';
+   CREATE DATABASE favorita;
+   CREATE USER postgres WITH PASSWORD 'favorita2026';
    GRANT ALL PRIVILEGES ON DATABASE favorita_db TO favorita_user;
-   \q
 ```
 
 ### 8.3 Clonación del Repositorio y Entorno Virtual de Python
