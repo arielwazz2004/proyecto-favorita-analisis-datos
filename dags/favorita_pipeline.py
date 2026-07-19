@@ -1,5 +1,6 @@
 import sys
 import os
+import logging
 from datetime import datetime, timedelta
 
 from airflow import DAG
@@ -14,14 +15,28 @@ from consolidar import consolidar
 from eda_profundo import eda_profundo
 from exportar_postgres import exportar_postgres
 
+
+def registrar_fallo(context):
+    tarea = context.get("task_instance")
+    logging.error(
+        f"[favorita_pipeline] FALLO en la tarea '{tarea.task_id}' "
+        f"— ejecución: {context.get('execution_date')}"
+    )
+
+
+default_args = {
+    "retries": 1,
+    "retry_delay": timedelta(minutes=5),
+    "on_failure_callback": registrar_fallo,
+}
+
 with DAG(
     dag_id="favorita_pipeline",
     description="Pipeline de ventas Corporación Favorita",
     start_date=datetime(2026, 7, 1),
-    schedule=None,  
+    schedule=None,
     catchup=False,
-    retries=1,                         
-    retry_delay=timedelta(minutes=5),
+    default_args=default_args,
     tags=["favorita", "proyecto"],
 ) as dag:
 
@@ -54,4 +69,5 @@ with DAG(
         task_id="exportar_postgres",
         python_callable=exportar_postgres,
     )
+
     tarea_1 >> tarea_2 >> tarea_3 >> tarea_4 >> tarea_5 >> tarea_6
