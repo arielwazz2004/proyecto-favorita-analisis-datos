@@ -1,0 +1,16 @@
+# Datos (nunca se suben)
+data/
+staging/
+
+# Entorno virtual de Python
+airflow_venv/
+
+# Carpeta interna de Airflow (logs, base de datos SQLite, configuración)
+airflow/
+
+# Cache de Python
+__pycache__/
+*.pyc
+
+# Archivos del sistema
+.DS_Store

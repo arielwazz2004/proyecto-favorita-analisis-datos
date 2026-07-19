@@ -1,0 +1,5 @@
+{
+  "fecha_actualizacion": "2026-07-18",
+  "version_dataset": "1.0",
+  "descripcion": "Pipeline completo: carga, limpieza, consolidación, EDA y exportación a PostgreSQL del dataset Store Sales - Corporación Favorita"
+}
