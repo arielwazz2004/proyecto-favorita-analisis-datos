@@ -30,16 +30,12 @@ El flujo completo está orquestado por un DAG de Airflow (`favorita_pipeline`) c
 ```
  CSV locales (carpeta data/)
           │
-          ▼
  ⏰ Apache Airflow — orquesta el DAG favorita_pipeline
           │
-          ▼
  ⚡ Polars — carga, limpieza, consolidación y EDA
           │
-          ▼
  🗄️ PostgreSQL (base "favorita") — 19 tablas persistidas
           │
-          ▼
  📊 Power BI — conexión DirectQuery en tiempo real, 8 visualizaciones
 ```
 
@@ -55,9 +51,9 @@ El flujo completo está orquestado por un DAG de Airflow (`favorita_pipeline`) c
 
 ## 4. Descripción del DAG: tareas, dependencias y configuración
 
-**Nombre del DAG:** `favorita_pipeline`
+**DAG:** favorita_pipeline
 
-**Tareas (orden estrictamente secuencial):**
+**Tareas:**
 
 1. **cargar_datos** — Lee los 5 CSV con Polars (`pl.read_csv`) y los guarda en formato parquet intermedio.
 2. **eda_inicial** — Diagnóstico de calidad: filas, columnas, tipos de dato, nulos (conteo y %), duplicados y rango de fechas. Guarda el resultado en `reporte_eda_inicial.json`.
@@ -70,12 +66,12 @@ El flujo completo está orquestado por un DAG de Airflow (`favorita_pipeline`) c
 
 **Configuración:**
 ```python
-schedule = None              # ejecución manual desde la UI de Airflow
+schedule = None       
 start_date = datetime(2026, 7, 1)
 catchup = False
 retries = 1
 retry_delay = timedelta(minutes=5)
-on_failure_callback = registrar_fallo   # registra el error en el log de Airflow
+on_failure_callback = registrar_fallo  
 ```
 
 ---
@@ -88,10 +84,10 @@ on_failure_callback = registrar_fallo   # registra el error en el log de Airflow
 - **Consolidación:** genera un dataset unificado de 3,000,888 filas y 13 columnas.
 - **EDA profundo:** produce 16 tablas de estadísticos (ventas por familia, top/bottom 10 tiendas, evolución mensual/anual, feriados nacionales, sensibilidad por familia, promociones, correlación petróleo-ventas, ticket promedio, etc.).
 - **Exportación:** persiste el consolidado y las 16 tablas de EDA en PostgreSQL.
+- 
 <img width="894" height="552" alt="image" src="https://github.com/user-attachments/assets/a995123f-ac51-404e-814f-def01b4e5b38" />
 
-
-> 📸 *[Insertar aquí: captura de la vista Graph de Airflow mostrando el flujo de dependencias]*
+<img width="856" height="445" alt="image" src="https://github.com/user-attachments/assets/16ed6f19-1032-43e8-93d2-2c2597ac0299" />
 
 ---
 
@@ -106,9 +102,11 @@ on_failure_callback = registrar_fallo   # registra el error en el log de Airflow
 | eda_profundo | 3,000,888 filas de entrada | 16 tablas de estadísticos generadas |
 | exportar_postgres | 3,000,888 filas (tabla principal) + 16 tablas de EDA | Exportado en 61 lotes de 50,000 filas |
 
-**Tiempo total de ejecución del pipeline (Run Duration en Airflow):** `00:09:30`
+**Tiempo total de ejecución del pipeline:** `00:09:30`
 
-> 📸 *[Insertar aquí: captura de la vista Gantt de Airflow mostrando la duración de cada tarea]*
+<img width="1193" height="725" alt="image" src="https://github.com/user-attachments/assets/6baece84-43fb-4097-bd60-11eac0563a4f" />
+
+<img width="1156" height="650" alt="image" src="https://github.com/user-attachments/assets/559208db-c201-446a-bd36-776f9057c2ce" />
 
 ---
 
@@ -116,18 +114,28 @@ on_failure_callback = registrar_fallo   # registra el error en el log de Airflow
 
 Conexión configurada en modo **DirectQuery** contra la base de datos PostgreSQL local (`favorita`), sin importar una copia estática de los datos.
 
-**Visualizaciones incluidas (8 mínimas requeridas):**
+**Evidencias de EDA Profundo mediante Power BI:**
 
 1. 🛒 Ventas totales por familia de producto — *GROCERY I* lidera con ~343 millones.
+<img width="1600" height="720" alt="image" src="https://github.com/user-attachments/assets/7af38671-c050-4a03-b063-530db09bf60c" />
+<img width="1600" height="664" alt="image" src="https://github.com/user-attachments/assets/667cb96c-0782-49a5-8135-7cd256bc5388" />
 2. 📈 Evolución mensual de ventas 2013-2017 — pico máximo en diciembre 2016 (~29 millones).
+<img width="1600" height="726" alt="image" src="https://github.com/user-attachments/assets/b662d5d6-a6c6-492c-aa51-dc61eb4319e3" />
 3. 🗺️ Mapa de ventas por ciudad — *Quito* concentra ~556 millones, muy por encima de Guayaquil.
+<img width="1600" height="723" alt="image" src="https://github.com/user-attachments/assets/43f44c91-4a2d-4eb7-98ca-e247126fc66e" />
 4. 🎉 Impacto de feriados nacionales — venta promedio de 419 en feriado vs 352 en día normal.
+<img width="1600" height="741" alt="image" src="https://github.com/user-attachments/assets/73e949c2-c804-4470-9570-29f263c01736" />
 5. 🛢️ Correlación precio del petróleo vs ventas mensuales (dispersión) — correlación de **-0.75**.
+<img width="1600" height="729" alt="image" src="https://github.com/user-attachments/assets/30d28454-8669-4aa2-bbc3-cfe5d14bcea3" />
 6. 🏷️ Comparativo ventas con y sin promoción — 1,137.7 vs 158.2 (más de 7 veces mayor con promoción).
+<img width="1600" height="734" alt="image" src="https://github.com/user-attachments/assets/424361aa-82cb-4c8e-9f6f-db60a751079c" />
 7. 🏪 Ranking de tiendas por ventas totales.
+<img width="1521" height="790" alt="image" src="https://github.com/user-attachments/assets/9159fd96-4fbe-48a7-8083-46d9e5598da2" />
 8. 🥇 Familia de productos con mayor volumen: *GROCERY I*.
+<img width="377" height="171" alt="image" src="https://github.com/user-attachments/assets/06e4d970-add4-4424-bb88-743b548065e0" />
 
-> 📸 *[Insertar aquí: captura del dashboard completo de Power BI]*
+<img width="1396" height="738" alt="image" src="https://github.com/user-attachments/assets/c75cb091-e556-4f14-aa87-efbb563f7277" />
+
 
 ---
 
@@ -139,7 +147,7 @@ Conexión configurada en modo **DirectQuery** contra la base de datos PostgreSQL
 wsl --install -d Ubuntu
 ```
 
-Configurar recursos en `C:\Users\<usuario>\.wslconfig`:
+Configurar recursos en `C:\Users\ariel\.wslconfig`:
 ```ini
 [wsl2]
 memory=6GB
@@ -201,7 +209,7 @@ airflow standalone
 
 ### 8.8 Ejecutar el pipeline
 
-Acceder a `http://localhost:8080`, activar el DAG `favorita_pipeline` y disparar la ejecución manualmente con el botón ▶.
+Acceder a `http://localhost:8080`, activar el DAG `favorita_pipeline` y disparar la ejecución manualmente con el botón play.
 
 ### 8.9 Conectar Power BI
 
