@@ -88,8 +88,8 @@ on_failure_callback = registrar_fallo   # registra el error en el log de Airflow
 - **Consolidación:** genera un dataset unificado de 3,000,888 filas y 13 columnas.
 - **EDA profundo:** produce 16 tablas de estadísticos (ventas por familia, top/bottom 10 tiendas, evolución mensual/anual, feriados nacionales, sensibilidad por familia, promociones, correlación petróleo-ventas, ticket promedio, etc.).
 - **Exportación:** persiste el consolidado y las 16 tablas de EDA en PostgreSQL.
+<img width="894" height="552" alt="image" src="https://github.com/user-attachments/assets/a995123f-ac51-404e-814f-def01b4e5b38" />
 
-> 📸 *[Insertar aquí: captura de la vista Grid de Airflow con las 6 tareas en verde tras ejecución exitosa]*
 
 > 📸 *[Insertar aquí: captura de la vista Graph de Airflow mostrando el flujo de dependencias]*
 
