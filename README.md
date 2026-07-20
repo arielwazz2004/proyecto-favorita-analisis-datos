@@ -1,6 +1,6 @@
 # 🥑 Pipeline ETL - Corporación Favorita 2026A
 
-Pipeline automatizado de ingeniería de datos para la extracción, transformación, análisis y persistencia del dataset de ventas de Corporación Favorita. Implementado sobre una VM Ubuntu, utiliza Apache Airflow para la orquestación, Polars para el procesamiento eficiente de más de 3 millones de filas, PostgreSQL para almacenamiento estructurado, y Power BI para visualización en tiempo real mediante conexión DirectQuery.
+Pipeline automatizado de datos para la extracción, transformación, análisis y persistencia del dataset de ventas de Corporación Favorita. Implementado sobre una VM Ubuntu, utiliza Apache Airflow para la orquestación, Polars para el procesamiento eficiente de más de 3 millones de filas, PostgreSQL para almacenamiento estructurado, y Power BI para visualización en tiempo real mediante conexión DirectQuery.
 
 ---
 
