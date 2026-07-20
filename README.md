@@ -129,6 +129,7 @@ Conexión configurada en modo **DirectQuery** contra la base de datos PostgreSQL
 7. 🏪 Ranking de tiendas por ventas totales.
 <img width="1521" height="790" alt="image" src="https://github.com/user-attachments/assets/9159fd96-4fbe-48a7-8083-46d9e5598da2" />
 8. 🥇 Familia de productos con mayor volumen: *GROCERY I*.
+   
 <img width="377" height="171" alt="image" src="https://github.com/user-attachments/assets/06e4d970-add4-4424-bb88-743b548065e0" />
 
 <img width="1396" height="738" alt="image" src="https://github.com/user-attachments/assets/c75cb091-e556-4f14-aa87-efbb563f7277" />
